@@ -1,0 +1,493 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+		"name": "Portfolio API Collection",
+		"description": "API collection for managing Portfolio sections (Projects, Experiences, Certificates, Skills, Image Uploads, and Analytics). Set the collection variable `base_url` to change the host.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "POST Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set(\"jwt_token\", jsonData.data.token);",
+									"    console.log(\"Token automatically set to collection variable 'jwt_token'\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticate admin user. On successful login, the response token will be automatically set to the `jwt_token` collection variable."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "GET List Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/projects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Project by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/projects/PASTE_PROJECT_UUID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"projects",
+								"PASTE_PROJECT_UUID_HERE"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Project",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"YOLOv8 Palm Oil Leaf Disease Detection\",\n    \"description\": \"Applied deep learning segmentation models...\",\n    \"thumbnail\": \"/uploads/projects/sample.png\",\n    \"github_url\": \"https://github.com/example/yolo\",\n    \"demo_url\": \"\",\n    \"tech_stack\": \"Python,YOLOv8,PyTorch,OpenCV\",\n    \"order\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/projects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update Project",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated YOLOv8 Palm Oil Project\",\n    \"description\": \"Updated description text...\",\n    \"thumbnail\": \"/uploads/projects/sample-updated.png\",\n    \"github_url\": \"https://github.com/example/yolo\",\n    \"demo_url\": \"https://demo.example.com\",\n    \"tech_stack\": \"Python,YOLOv8,PyTorch,OpenCV,Streamlit\",\n    \"order\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/projects/PASTE_PROJECT_UUID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"projects",
+								"PASTE_PROJECT_UUID_HERE"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Project",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/projects/PASTE_PROJECT_UUID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"projects",
+								"PASTE_PROJECT_UUID_HERE"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Experiences",
+			"item": [
+				{
+					"name": "GET List Experiences",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/experiences",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"experiences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Experience",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company\": \"AEON Mall\",\n    \"role\": \"Data Analyst & Backend Intern\",\n    \"location\": \"Jakarta, ID\",\n    \"start_date\": \"July 2024\",\n    \"end_date\": \"December 2024\",\n    \"current_job\": false,\n    \"description\": \"- Developed automated supply chain forecasting dashboards...\\n- Maintained database consistency.\",\n    \"order\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/experiences",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"experiences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Update Experience",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company\": \"AEON Mall Indonesia\",\n    \"role\": \"Data & Systems Analyst\",\n    \"location\": \"Jakarta, ID\",\n    \"start_date\": \"July 2024\",\n    \"end_date\": \"Present\",\n    \"current_job\": true,\n    \"description\": \"- Architected ordering forecasting engine...\",\n    \"order\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/experiences/PASTE_EXP_UUID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"experiences",
+								"PASTE_EXP_UUID_HERE"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Experience",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/experiences/PASTE_EXP_UUID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"experiences",
+								"PASTE_EXP_UUID_HERE"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Certificates",
+			"item": [
+				{
+					"name": "GET List Certificates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/certificates",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"certificates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Certificate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Google Data Analytics Professional Certificate\",\n    \"issuer\": \"Coursera / Google\",\n    \"issue_date\": \"May 2025\",\n    \"credential_url\": \"https://coursera.org/verify/example\",\n    \"thumbnail\": \"/uploads/certificates/google-data.png\",\n    \"order\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/certificates",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"certificates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Certificate",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/certificates/PASTE_CERT_UUID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"certificates",
+								"PASTE_CERT_UUID_HERE"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Skills",
+			"item": [
+				{
+					"name": "GET List Skills",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/skills",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"skills"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Skill",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"TensorFlow\",\n    \"category\": \"Data Science & AI\",\n    \"order\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/skills",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"skills"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Skill",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/skills/PASTE_SKILL_UUID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"skills",
+								"PASTE_SKILL_UUID_HERE"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Upload",
+			"item": [
+				{
+					"name": "POST Upload Image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/upload/project",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"upload",
+								"project"
+							]
+						},
+						"description": "Upload a project thumbnail. Replace the path parameter `:type` with `project` or `certificate` depending on the image type."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analytics",
+			"item": [
+				{
+					"name": "GET Dashboard Summary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/summary",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"summary"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

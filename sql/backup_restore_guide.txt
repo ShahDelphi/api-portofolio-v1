@@ -1,0 +1,84 @@
+================================================================================
+POSTGRESQL BACKUP & RESTORE GUIDE (WINDOWS & LINUX)
+================================================================================
+File ini berisi instruksi lengkap untuk melakukan backup dan restore database 
+PostgreSQL (khususnya untuk database "portofolio_db" menggunakan format binary / custom).
+
+--------------------------------------------------------------------------------
+1. PANDUAN WINDOWS (PowerShell)
+--------------------------------------------------------------------------------
+Di Windows PowerShell, kita menggunakan '$env:PGPASSWORD' untuk mendefinisikan
+password dan operator '&' untuk memanggil program yang berada di folder berspasi 
+(seperti "C:\Program Files").
+
+PENTING: Selalu gunakan flag '-f' untuk menentukan file output. JANGAN gunakan
+redirection operator '>' karena PowerShell akan merusak file binary backup tersebut 
+dengan mengubah encoding datanya.
+
+A. CARA BACKUP (Windows):
+   Jalankan perintah ini di PowerShell:
+   
+   $env:PGPASSWORD="shahdelphi@2004"
+   & "C:\Program Files\PostgreSQL\14\bin\pg_dump.exe" -U postgres -p 5432 -d portofolio_db -F c --no-owner --no-privileges --disable-triggers --verbose -f d:\program\web-portofolio\v2\portofolio-backend\sql\portofolio_db.backup
+
+   *Catatan: Sesuaikan folder "14" dengan versi PostgreSQL yang terinstal di komputer.*
+
+B. CARA RESTORE (Windows):
+   Pastikan database tujuan sudah dibuat terlebih dahulu (misalnya nama DB: "portofolio_db_prod"),
+   lalu jalankan perintah restore ini di PowerShell:
+   
+   $env:PGPASSWORD="password_database_tujuan"
+   & "C:\Program Files\PostgreSQL\14\bin\pg_restore.exe" -U postgres -p 5432 -d portofolio_db_prod --no-owner --no-privileges --disable-triggers --verbose d:\program\web-portofolio\v2\portofolio-backend\sql\portofolio_db.backup
+
+
+--------------------------------------------------------------------------------
+2. PANDUAN LINUX (Bash / Terminal Linux)
+--------------------------------------------------------------------------------
+Di Linux, kita bisa menggabungkan pendefinisian password secara langsung (inline) 
+sebelum nama perintah utama.
+
+A. CARA BACKUP (Linux):
+   Jalankan perintah ini di terminal Linux:
+   
+   PGPASSWORD="shahdelphi@2004" pg_dump -U postgres -p 5432 -d portofolio_db -F c --no-owner --no-privileges --disable-triggers --verbose -f ./portofolio_db.backup
+   
+   (Atau bisa juga menggunakan '>' untuk redirect ke file di Linux):
+   PGPASSWORD="shahdelphi@2004" pg_dump -U postgres -p 5432 -d portofolio_db -F c --no-owner --no-privileges --disable-triggers --verbose > ./portofolio_db.backup
+
+B. CARA RESTORE (Linux):
+   Pastikan database tujuan sudah dibuat, lalu jalankan perintah ini di terminal Linux:
+   
+   PGPASSWORD="password_database_tujuan" pg_restore -U postgres -p 5432 -d portofolio_db_prod --no-owner --no-privileges --disable-triggers --verbose ./portofolio_db.backup
+
+
+--------------------------------------------------------------------------------
+3. PENJELASAN PARAMETER/FLAGS PG_DUMP & PG_RESTORE
+--------------------------------------------------------------------------------
+* -U postgres          : Menentukan username PostgreSQL (default: postgres).
+* -p 5432              : Menentukan port PostgreSQL (default: 5432).
+* -d portofolio_db     : Menentukan nama database sumber yang akan di-backup/di-restore.
+* -F c                 : Menggunakan format "Custom" (Binary). Format ini terkompresi,
+                         sangat aman, dan direkomendasikan untuk pg_restore.
+* --no-owner           : Mengabaikan kepemilikan objek database asli. Ini sangat berguna 
+                         saat di-restore ke server hosting/server prod yang memiliki 
+                         username database berbeda.
+* --no-privileges      : Mengabaikan hak akses (access privileges/grant tables) asli 
+                         untuk menghindari error hak akses saat restore.
+* --disable-triggers   : Menonaktifkan trigger database selama proses restore (hanya 
+                         berfungsi jika di-restore menggunakan akun superuser).
+* -f <file_path>       : Menulis output langsung ke file (menghindari korupsi encoding biner).
+* --verbose            : Menampilkan log detail selama proses backup/restore.
+
+--------------------------------------------------------------------------------
+4. TIPS & TROUBLESHOOTING
+--------------------------------------------------------------------------------
+* Cara Mencari Lokasi pg_dump di Windows:
+  Buka File Explorer, masuk ke "C:\Program Files\PostgreSQL\". Di sana akan terlihat 
+  folder versi (contoh: "14", "15", "16"). Lokasi pg_dump.exe dan pg_restore.exe 
+  akan selalu berada di dalam subfolder "bin" (contoh: "C:\Program Files\PostgreSQL\14\bin").
+  
+* Error: "pg_restore: [archiver] input file does not appear to be a valid archive"
+  Kemungkinan besar file backup rusak karena di-backup menggunakan redirect '>' di 
+  PowerShell Windows. Solusinya, lakukan backup ulang dengan menggunakan flag '-f' 
+  seperti contoh di bagian 1-A.
+================================================================================
